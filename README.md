@@ -1,109 +1,147 @@
-# HomepilotApp
+# **Test technique Homepilot**
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## **Objectif**
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+Développer une application pour gérer des biens immobiliers et leurs propriétaires avec la stack suivante :
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **Backend** : NestJS.
+- **Frontend** : React.
+- **Workspace** : Nx.
 
-## Generate a library
+---
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
-```
+## **Spécifications fonctionnelles**
 
-## Run tasks
+### **Entités**
 
-To build the library use:
+#### **Bien (Unit)**
 
-```sh
-npx nx build pkg1
-```
+- **Attributs** :
 
-To run any task with Nx use:
+  - `id`: Identifiant unique.
+  - `name`: Nom du bien (ex. : "Appartement 1").
+  - `surface`: Surface en m².
+  - `furnished`: Indique si le bien est meublé.
+  - `rent_amount`: Montant du loyer (€).
+  - `photo_url`: URL d'une photo du bien.
+  - `created_at`: Date de création.
+  - `updated_at`: Dernière mise à jour.
 
-```sh
-npx nx <target> <project-name>
-```
+- **Relations** :
+  - Un bien est associé à un ou plusieurs propriétaires.
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+#### **Propriétaire (Landlord)**
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- **Attributs** :
 
-## Versioning and releasing
+  - `id`: Identifiant unique.
+  - `first_name`: Prénom.
+  - `last_name`: Nom.
+  - `created_at`: Date de création.
+  - `updated_at`: Dernière mise à jour.
 
-To version and release the library use
+- **Relations** :
+  - Un propriétaire peut posséder plusieurs biens.
 
-```
-npx nx release
-```
+---
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+## **Consignes**
 
-[Learn more about Nx release &raquo;](hhttps://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### **Backend**
 
-## Keep TypeScript project references up to date
+1. **Base de données** :
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+   - Utiliser une base de données relationnelle.
+   - Utiliser un ORM pour interagir avec la base de données, par exemple TypeORM, MikroORM ou autre dont vous devrez justifier le choix.
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+2. **Endpoints RESTful** :
 
-```sh
-npx nx sync
-```
+   - **CRUD pour les biens**.
+     - Afficher tous les biens.
+     - Créer un bien.
+     - Supprimer un bien.
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+---
 
-```sh
-npx nx sync:check
-```
+### **Frontend**
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+1. **Fonctionnalités** :
 
-## Set up CI!
+   - Afficher la liste des biens avec leurs propriétaires.
+   - Créer un nouveau bien.
+   - Supprimer un bien existant.
 
-### Step 1
+   Voici un exemple de visuels non définitif pour lequel vous pouvez proposer des améliorations :
 
-To connect to Nx Cloud, run the following command:
+   **Homepage**
 
-```sh
-npx nx connect
-```
+   <img src="screens/01-all-units.png" alt="01-all-units.png" style="width:640px;height:340px;">
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+   **Modale d'ajout d'un bien**
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+   <img src="screens/02-add-unit.png" alt="02-add-unit.png" style="width:400px;height:280px;">
 
-### Step 2
+2. **Composants UI** :
 
-Use the following command to configure a CI workflow for your workspace:
+   - **UnitCard** : Affiche les détails d’un bien.
+   - Composants modulaires et importés depuis `packages/ui`.
 
-```sh
-npx nx g ci-workflow
-```
+---
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## **Structure du Projet**
 
-## Install Nx Console
+- **Workspace NX** :
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+  - **Backend** : `apps/api/`.
+  - **Frontend** : `apps/web/`.
+  - **Composants UI partagés** : `packages/ui/`.
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Useful links
+## **Livrables**
 
-Learn more:
+1. **Dépôt GitHub** :
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+   - Projet complet.
+   - Instructions claires pour configurer et exécuter l'application (vous mettrez à disposition les commandes nécessaires).
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+2. **Projet** :
+
+- Frontend
+
+  - Fonctionnel et accessible à l'adresse : `http://localhost:8910/`.
+
+- Backend
+
+  - Fonctionnel et accessible à l'adresse : `http://localhost:8911/`.
+
+---
+
+## **Bonus (facultatif)**
+
+- **Pagination** :
+
+  - Liste des biens paginée.
+
+- **Dockerisation** :
+
+  - Conteneuriser le projet pour faciliter le déploiement.
+
+---
+
+## **Récupération et mise à disposition du projet**
+
+Clonez/downloadez le repo puis assignez lui l'URL d'un nouveau repo git que vous aurez créé afin de pouvoir nous le partager.
+
+Merci de ne pas forker le repo pour ne pas involontairement partager votre travail avec les autres candidats 😉
+
+Voici les identifiants Github à ajouter en tant que collaborateur:
+
+- @BenoitStephant
+- @itsaben
+- @thibmat
+- @selmpilot
+
+---
+
+Bonne chance pour votre test technique ! 🐣
