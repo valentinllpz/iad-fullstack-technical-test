@@ -123,9 +123,9 @@ Développer une application pour gérer des biens immobiliers et leurs propriét
 
   - Liste des biens paginée.
 
-- **Dockerisation** :
+- **Filtrage et tri** :
 
-  - Conteneuriser le projet pour faciliter le déploiement.
+  - Ajouter des options de filtrage (par exemple, par surface ou meublé/non meublé) et de tri (par loyer, surface, etc.) pour la liste des biens.
 
 ---
 
