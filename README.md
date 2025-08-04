@@ -140,7 +140,6 @@ Voici les identifiants Github à ajouter en tant que collaborateur:
 - @BenoitStephant
 - @itsaben
 - @thibmat
-- @selmpilot
 
 ---
 
