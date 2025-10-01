@@ -138,8 +138,8 @@ Merci de ne pas forker le repo pour ne pas involontairement partager votre trava
 Voici les identifiants Github à ajouter en tant que collaborateur:
 
 - @BenoitStephant
-- @itsaben
-- @thibmat
+- @MrGlox
+- @gregballot-iad
 
 ---
 
