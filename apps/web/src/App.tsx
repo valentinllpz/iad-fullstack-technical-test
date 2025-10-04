@@ -1,4 +1,4 @@
-import "./App.css";
+import Layout from "./components/Layout";
 import UnitList from "./components/UnitList";
 
 const units = [
@@ -14,11 +14,9 @@ const units = [
 
 function App() {
   return (
-    <>
-      <div>
-        <UnitList units={units} />
-      </div>
-    </>
+    <Layout>
+      <UnitList units={units} />
+    </Layout>
   );
 }
 
