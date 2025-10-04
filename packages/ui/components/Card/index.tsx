@@ -9,16 +9,16 @@ const styles = css`
   border-radius: 0.5rem;
 `;
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
   dataTestId?: string;
 }
 
-const Card: React.FC<CardProps> = ({ children, className, ...rest }) => {
+const Card: React.FC<CardProps> = ({ children, className, dataTestId, ...rest }) => {
   return (
     <div
-      data-testid={rest.dataTestId}
+      data-testid={dataTestId}
       className={classnames("card", styles, className)}
       {...rest}
     >

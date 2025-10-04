@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import NavBar from "../NavBar";
 
-import "./layout.css";
+import "./styles.css";
 
 interface LayoutProps {
   children: ReactNode;
