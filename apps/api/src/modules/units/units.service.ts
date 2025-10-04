@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Landlord } from '../landlords/landlord.entity';
@@ -19,11 +23,19 @@ export class UnitsService {
   }
 
   async create(createUnitDto: CreateUnitDto): Promise<Unit> {
-    const landlords = createUnitDto.landlordIds?.length
-      ? await this.landlordsRepository.find({
-          where: { id: In(createUnitDto.landlordIds) },
-        })
-      : [];
+    if (!createUnitDto.landlordIds || createUnitDto.landlordIds.length === 0) {
+      throw new BadRequestException(
+        'A unit must be linked to at least one landlord.',
+      );
+    }
+
+    const landlords = await this.landlordsRepository.find({
+      where: { id: In(createUnitDto.landlordIds) },
+    });
+
+    if (landlords.length !== createUnitDto.landlordIds.length) {
+      throw new BadRequestException('One or more landlord ids are invalid.');
+    }
 
     const unit = this.unitsRepository.create({
       name: createUnitDto.name,
