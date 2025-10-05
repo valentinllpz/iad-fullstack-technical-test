@@ -1,5 +1,8 @@
+import { useState } from "react";
+
 import UnitCard from "../UnitCard";
 import AddUnitCard from "../AddUnitCard";
+import AddUnitModal from "../AddUnitModal";
 
 import "./styles.css";
 
@@ -17,7 +20,7 @@ interface Unit {
   }>;
 }
 
-const mockUnits: Unit[] = [
+const staticUnits: Unit[] = [
   {
     id: "1",
     name: "Studio Le Marais",
@@ -72,24 +75,22 @@ const mockUnits: Unit[] = [
 ];
 
 const UnitList = () => {
-  const handleDelete = (id: string) => {
-    console.log(`Supprimer le bien ${id}`);
-    // TODO: Implémenter la suppression
-  };
-
-  const handleAddUnit = () => {
-    console.log("Ajouter un bien");
-    // TODO: Implémenter l'ajout
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div>
       <div className="unit-list">
-        <AddUnitCard onClick={handleAddUnit} />
-        {mockUnits.map((unit) => (
-          <UnitCard key={unit.id} unit={unit} onDelete={handleDelete} />
+        <AddUnitCard onClick={() => setIsModalOpen(true)} />
+        {staticUnits.map((unit) => (
+          <UnitCard
+            key={unit.id}
+            unit={unit}
+            onDelete={(id) => console.log("Supprimer le bien", id)}
+          />
         ))}
       </div>
+
+      <AddUnitModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

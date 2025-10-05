@@ -46,13 +46,12 @@ const UnitCard = ({ unit, onDelete }: UnitCardProps) => {
 
         <div className="unit-card__details">
           <span className="unit-card__detail-item">
-             {unit.surface}m² •{" "}
-            {unit.furnished ? "Meublé" : "Non meublé"}
+            📐 {unit.surface}m² • {unit.furnished ? "🪑 Meublé" : "🏠 Non meublé"}
           </span>
           <span
             className={classnames("unit-card__detail-item", "unit-card__price")}
           >
-             {unit.rentAmount}€/mois
+            💰 {unit.rentAmount}€/mois
           </span>
         </div>
 

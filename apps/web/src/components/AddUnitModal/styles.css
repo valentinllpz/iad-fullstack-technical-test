@@ -1,0 +1,63 @@
+.add-unit-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.75rem 2rem;
+}
+
+.add-unit-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.add-unit-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #1f2937;
+}
+
+.add-unit-modal__field input {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-unit-modal__field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  outline: none;
+}
+
+.add-unit-modal__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.add-unit-modal__toggle {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.add-unit-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .add-unit-modal {
+    padding: 1.5rem;
+  }
+
+  .add-unit-modal__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
