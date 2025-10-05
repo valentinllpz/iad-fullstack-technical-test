@@ -1,146 +1,80 @@
-# **Test technique Homepilot**
+# Homepilot Property Manager
 
-## **Objectif**
+Technical interview that implements a fullstack Nx workspace featuring a NestJS API, a React frontend, and shared UI components. 
 
-Développer une application pour gérer des biens immobiliers et leurs propriétaires avec la stack suivante :
+## Tech Stack
 
-- **Backend** : NestJS.
-- **Frontend** : React.
-- **Workspace** : Nx.
+- **Nx** for monorepo orchestration
+- **NestJS + TypeORM** (`apps/api`) backed by **SQLite**
+- **React + Vite** (`apps/web`)
+- **Yarn workspaces** for dependency management
 
----
+## Prerequisites
 
-## **Spécifications fonctionnelles**
+- **Node.js** 18 (>= 18.0.0 < 19.0.0)
+- **Yarn** >= 1.22 (npm usage is disabled in this repo)
 
-### **Entités**
+Check your versions before moving on:
 
-#### **Bien (Unit)**
+```bash
+node -v
+yarn -v
+```
 
-- **Attributs** :
+## 1. Clone & Install
 
-  - `id`: Identifiant unique.
-  - `name`: Nom du bien (ex. : "Appartement 1").
-  - `surface`: Surface en m².
-  - `furnished`: Indique si le bien est meublé.
-  - `rent_amount`: Montant du loyer (€).
-  - `photo_url`: URL d'une photo du bien.
-  - `created_at`: Date de création.
-  - `updated_at`: Dernière mise à jour.
+```bash
+git clone <https://github.com/valentinllpz/iad-fullstack-technical-test>
+cd iad-fullstack-technical-test
+yarn install
+```
 
-- **Relations** :
-  - Un bien est associé à un ou plusieurs propriétaires.
+## 2. Environment Variables
 
-#### **Propriétaire (Landlord)**
+Default values live in `.env.local`. For local development copy them to `.env`:
 
-- **Attributs** :
+```bash
+cp .env.local .env
+```
 
-  - `id`: Identifiant unique.
-  - `first_name`: Prénom.
-  - `last_name`: Nom.
-  - `created_at`: Date de création.
-  - `updated_at`: Dernière mise à jour.
+For simplicity, both the backend and frontend read from this file.
 
-- **Relations** :
-  - Un propriétaire peut posséder plusieurs biens.
+## 3. Database & Seed Data
 
----
+The API uses an SQLite file stored at `apps/api/data/db.sqlite` by default.
 
-## **Consignes**
+To reset the schema and load sample landlords & units, run:
 
-### **Backend**
+```bash
+yarn workspace api seed
+```
 
-1. **Base de données** :
+The seed script wipes the database before inserting fixtures. Re-run it any time you want a clean dataset.
 
-   - Utiliser une base de données relationnelle.
-   - Utiliser un ORM pour interagir avec la base de données, par exemple TypeORM, MikroORM ou autre dont vous devrez justifier le choix.
+## 4. Run the Apps
 
-2. **Endpoints RESTful** :
+Start both servers from the workspace root:
 
-   - **CRUD pour les biens**.
-     - Afficher tous les biens.
-     - Créer un bien.
-     - Supprimer un bien.
+```bash
+yarn dev
+```
 
----
+- API: http://localhost:8911
+- Web: http://localhost:8910 (proxied by Vite, fetching data from the API)
 
-### **Frontend**
+> Tip: `yarn dev` calls `nx run-many --target=dev --all`. To run apps individually you can use `yarn workspace api dev` or `yarn workspace web dev`.
 
-1. **Fonctionnalités** :
+## 5. Testing
 
-   - Afficher la liste des biens avec leurs propriétaires.
-   - Créer un nouveau bien.
-   - Supprimer un bien existant.
+### API (NestJS)
 
-   Voici un exemple de visuels non définitif pour lequel vous pouvez proposer des améliorations :
+- E2E tests: `yarn workspace api test:e2e`
 
-   **Homepage**
+### Web (React)
 
-   <img src="screens/01-all-units.png" alt="01-all-units.png" style="width:640px;height:340px;">
+- Component tests (Vitest): `yarn workspace web test`
 
-   **Modale d'ajout d'un bien**
+Given this is a technical interview exercise, the codebase favors broader end-to-end validation over a comprehensive unit-test suite.
 
-   <img src="screens/02-add-unit.png" alt="02-add-unit.png" style="width:400px;height:280px;">
 
-2. **Composants UI** :
 
-   - **UnitCard** : Affiche les détails d’un bien.
-   - Composants modulaires et importés depuis `packages/ui`.
-
----
-
-## **Structure du Projet**
-
-- **Workspace NX** :
-
-  - **Backend** : `apps/api/`.
-  - **Frontend** : `apps/web/`.
-  - **Composants UI partagés** : `packages/ui/`.
-
----
-
-## **Livrables**
-
-1. **Dépôt GitHub** :
-
-   - Projet complet.
-   - Instructions claires pour configurer et exécuter l'application (vous mettrez à disposition les commandes nécessaires).
-
-2. **Projet** :
-
-- Frontend
-
-  - Fonctionnel et accessible à l'adresse : `http://localhost:8910/`.
-
-- Backend
-
-  - Fonctionnel et accessible à l'adresse : `http://localhost:8911/`.
-
----
-
-## **Bonus (facultatif)**
-
-- **Pagination** :
-
-  - Liste des biens paginée.
-
-- **Filtrage et tri** :
-
-  - Ajouter des options de filtrage (par exemple, par surface ou meublé/non meublé) et de tri (par loyer, surface, etc.) pour la liste des biens.
-
----
-
-## **Récupération et mise à disposition du projet**
-
-Clonez/downloadez le repo puis assignez lui l'URL d'un nouveau repo git que vous aurez créé afin de pouvoir nous le partager.
-
-Merci de ne pas forker le repo pour ne pas involontairement partager votre travail avec les autres candidats 😉
-
-Voici les identifiants Github à ajouter en tant que collaborateur:
-
-- @BenoitStephant
-- @MrGlox
-- @gregballot-iad
-
----
-
-Bonne chance pour votre test technique ! 🐣
