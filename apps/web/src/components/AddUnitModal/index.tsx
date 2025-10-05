@@ -44,72 +44,85 @@ const AddUnitModal = ({ open, onClose }: AddUnitModalProps) => {
   };
 
   return (
-    <Modal open={open} onClose={onClose} title="Ajouter un bien" width={560} className="add-unit-modal">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Ajouter nouveau un bien"
+      width={560}
+      className="add-unit-modal"
+    >
       <form className="add-unit-modal__form" onSubmit={handleSubmit}>
-        <label className="add-unit-modal__field">
-          <span>Nom du bien</span>
-          <input
-            ref={firstInputRef}
-            type="text"
-            name="name"
-            value={formState.name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <div className="add-unit-modal__grid">
+        <div className="add-unit-modal__body">
           <label className="add-unit-modal__field">
-            <span>Surface (m²)</span>
+            <span>Nom du bien</span>
             <input
-              type="number"
-              min="1"
-              name="surface"
-              value={formState.surface}
+              ref={firstInputRef}
+              type="text"
+              name="name"
+              value={formState.name}
               onChange={handleChange}
               required
             />
           </label>
 
+          <div className="add-unit-modal__grid">
+            <label className="add-unit-modal__field">
+              <span>Surface (m²)</span>
+              <input
+                type="number"
+                min="1"
+                name="surface"
+                value={formState.surface}
+                onChange={handleChange}
+                required
+              />
+            </label>
+
+            <label className="add-unit-modal__field">
+              <span>Loyer (€/mois)</span>
+              <input
+                type="text"
+                name="rentAmount"
+                value={formState.rentAmount}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+
           <label className="add-unit-modal__field">
-            <span>Loyer (€/mois)</span>
+            <span>URL de la photo</span>
+            <input
+              type="url"
+              name="photoUrl"
+              value={formState.photoUrl}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label className="add-unit-modal__field">
+            <span>Propriétaires (séparés par des virgules)</span>
             <input
               type="text"
-              name="rentAmount"
-              value={formState.rentAmount}
+              name="landlords"
+              placeholder="Ex: Camille Dupont, Julien Martin"
+              value={formState.landlords}
               onChange={handleChange}
-              required
             />
           </label>
-        </div>
 
-        <label className="add-unit-modal__field">
-          <span>URL de la photo</span>
-          <input type="url" name="photoUrl" value={formState.photoUrl} onChange={handleChange} />
-        </label>
-
-        <label className="add-unit-modal__field">
-          <span>Propriétaires (séparés par des virgules)</span>
-          <input
-            type="text"
-            name="landlords"
-            placeholder="Ex: Camille Dupont, Julien Martin"
-            value={formState.landlords}
-            onChange={handleChange}
-          />
-        </label>
-
-        <div className="add-unit-modal__toggle">
-          <Toggle
-            checked={formState.furnished}
-            onChange={(event) =>
-              setFormState((prev) => ({
-                ...prev,
-                furnished: event.target.checked,
-              }))
-            }
-            label={formState.furnished ? "Meublé" : "Non meublé"}
-          />
+          <div className="add-unit-modal__toggle">
+            <Toggle
+              checked={formState.furnished}
+              onChange={(event) =>
+                setFormState((prev) => ({
+                  ...prev,
+                  furnished: event.target.checked,
+                }))
+              }
+              label={formState.furnished ? "Meublé" : "Non meublé"}
+            />
+          </div>
         </div>
 
         <div className="add-unit-modal__actions">

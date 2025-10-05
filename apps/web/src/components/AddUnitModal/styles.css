@@ -5,6 +5,15 @@
   padding: 1.75rem 2rem;
 }
 
+.add-unit-modal__body {
+  background: #f5f6f9;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .add-unit-modal__form {
   display: flex;
   flex-direction: column;
@@ -54,6 +63,10 @@
 @media (max-width: 640px) {
   .add-unit-modal {
     padding: 1.5rem;
+  }
+
+  .add-unit-modal__body {
+    padding: 1.25rem;
   }
 
   .add-unit-modal__actions {
