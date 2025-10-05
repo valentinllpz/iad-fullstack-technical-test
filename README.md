@@ -1,4 +1,4 @@
-# Homepilot Property Manager
+# Homepilot fullstack technical interview
 
 Technical interview that implements a fullstack Nx workspace featuring a NestJS API, a React frontend, and shared UI components. 
 
