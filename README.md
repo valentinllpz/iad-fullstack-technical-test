@@ -24,7 +24,7 @@ yarn -v
 ## 1. Clone & Install
 
 ```bash
-git clone <https://github.com/valentinllpz/iad-fullstack-technical-test>
+git clone https://github.com/valentinllpz/iad-fullstack-technical-test
 cd iad-fullstack-technical-test
 yarn install
 ```
