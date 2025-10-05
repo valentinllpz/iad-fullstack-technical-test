@@ -5,7 +5,7 @@ Technical interview that implements a fullstack Nx workspace featuring a NestJS 
 ## Tech Stack
 
 - **Nx** for monorepo orchestration
-- **NestJS + TypeORM** (`apps/api`) backed by **SQLite**
+- **NestJS + TypeORM** (`apps/api`) backed by **SQLite** (TypeORM is a natural Nest fit with strong docs, migrations, Postgres support / SQLite is the easiest ready to go setup)
 - **React + Vite** (`apps/web`)
 - **Yarn workspaces** for dependency management
 
@@ -75,6 +75,5 @@ yarn dev
 - Component tests (Vitest): `yarn workspace web test`
 
 Given this is a technical interview exercise, the codebase favors broader end-to-end validation over a comprehensive unit-test suite.
-
 
 
