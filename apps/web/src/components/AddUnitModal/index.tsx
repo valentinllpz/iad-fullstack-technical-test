@@ -36,7 +36,9 @@ const AddUnitModal = ({
   onSubmit,
 }: AddUnitModalProps) => {
   const [formState, setFormState] = React.useState<FormState>(initialState);
-  const [selectedLandlords, setSelectedLandlords] = React.useState<string[]>([]);
+  const [selectedLandlords, setSelectedLandlords] = React.useState<string[]>(
+    []
+  );
   const [error, setError] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const firstInputRef = React.useRef<HTMLInputElement>(null);
@@ -72,10 +74,11 @@ const AddUnitModal = ({
     const rentValue = Number(formState.rentAmount);
 
     if (selectedLandlords.length === 0) {
-      setError('Sélectionnez au moins un propriétaire.');
+      setError("Sélectionnez au moins un propriétaire.");
       return;
     }
 
+    setError(null);
     setIsSubmitting(true);
 
     try {
@@ -89,7 +92,8 @@ const AddUnitModal = ({
       });
       onClose();
     } catch (submissionError) {
-      setError(submissionError as string);
+      console.error(submissionError);
+      setError("Une erreur est survenue lors de l'enregistrement.");
     } finally {
       setIsSubmitting(false);
     }
