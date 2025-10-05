@@ -18,9 +18,9 @@ const envFilePath = process.env.NODE_ENV
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: process.env.DB_PATH,
+      database: process.env.DB_PATH || 'data/db.sqlite',
       entities: [Unit, Landlord],
-      synchronize: true, // TODO: disable in production
+      synchronize: process.env.NODE_ENV !== 'production',
     }),
     UnitsModule,
     LandlordsModule,
