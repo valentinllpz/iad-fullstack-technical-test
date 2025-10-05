@@ -13,6 +13,9 @@
     "packages/*",
     "apps/*"
   ],
+  "resolutions": {
+    "minimatch": "^9.0.5"
+  },
   "engines": {
     "node": ">=18 <19",
     "npm": "please-use-yarn",
