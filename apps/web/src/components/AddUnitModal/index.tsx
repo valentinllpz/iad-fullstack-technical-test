@@ -13,7 +13,15 @@ interface AddUnitModalProps {
   onSubmit: (payload: CreateUnitPayload) => Promise<void> | void;
 }
 
-const initialState = {
+interface FormState {
+  name: string;
+  surface: string;
+  rentAmount: string;
+  photoUrl?: string;
+  furnished: boolean;
+}
+
+const initialState: FormState = {
   name: "",
   surface: "",
   rentAmount: "",
@@ -21,9 +29,12 @@ const initialState = {
   furnished: true,
 };
 
-type FormState = typeof initialState;
-
-const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps) => {
+const AddUnitModal = ({
+  open,
+  onClose,
+  landlords,
+  onSubmit,
+}: AddUnitModalProps) => {
   const [formState, setFormState] = React.useState<FormState>(initialState);
   const [selectedLandlords, setSelectedLandlords] = React.useState<string[]>([]);
   const [error, setError] = React.useState<string | null>(null);
@@ -34,7 +45,6 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
     if (open) {
       setFormState(initialState);
       setSelectedLandlords(landlords.length === 1 ? [landlords[0].id] : []);
-      setError(null);
       setTimeout(() => {
         firstInputRef.current?.focus();
       }, 0);
@@ -50,7 +60,7 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
     setSelectedLandlords((prev) =>
       prev.includes(id)
         ? prev.filter((landlordId) => landlordId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -58,29 +68,14 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
     event.preventDefault();
 
     const trimmedName = formState.name.trim();
-    if (!trimmedName) {
-      setError("Le nom du bien est requis.");
-      return;
-    }
-
     const surfaceValue = Number(formState.surface);
-    if (!surfaceValue || surfaceValue <= 0) {
-      setError("La surface doit être un nombre positif.");
-      return;
-    }
-
     const rentValue = Number(formState.rentAmount);
-    if (!rentValue || rentValue <= 0) {
-      setError("Le loyer doit être un nombre positif.");
-      return;
-    }
 
     if (selectedLandlords.length === 0) {
-      setError("Sélectionnez au moins un propriétaire.");
+      setError('Sélectionnez au moins un propriétaire.');
       return;
     }
 
-    setError(null);
     setIsSubmitting(true);
 
     try {
@@ -89,16 +84,12 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
         surface: surfaceValue,
         furnished: formState.furnished,
         rentAmount: rentValue,
-        photoUrl: formState.photoUrl.trim() || undefined,
+        photoUrl: formState.photoUrl?.trim() || undefined,
         landlordIds: selectedLandlords,
       });
       onClose();
     } catch (submissionError) {
-      const message =
-        submissionError instanceof Error
-          ? submissionError.message
-          : "Une erreur est survenue lors de l'enregistrement.";
-      setError(message);
+      setError(submissionError as string);
     } finally {
       setIsSubmitting(false);
     }
@@ -107,7 +98,13 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
   const noLandlords = landlords.length === 0;
 
   return (
-    <Modal open={open} onClose={onClose} title="Ajouter un bien" width={560} className="add-unit-modal">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Ajouter un nouveau bien"
+      width={560}
+      className="add-unit-modal"
+    >
       <div className="add-unit-modal__body">
         <form className="add-unit-modal__form" onSubmit={handleSubmit}>
           {error ? <p className="add-unit-modal__error">{error}</p> : null}
@@ -171,7 +168,10 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
                 </p>
               ) : (
                 landlords.map((landlord) => (
-                  <label key={landlord.id} className="add-unit-modal__landlord-option">
+                  <label
+                    key={landlord.id}
+                    className="add-unit-modal__landlord-option"
+                  >
                     <input
                       type="checkbox"
                       value={landlord.id}
@@ -201,7 +201,12 @@ const AddUnitModal = ({ open, onClose, landlords, onSubmit }: AddUnitModalProps)
           </div>
 
           <div className="add-unit-modal__actions">
-            <Button type="button" variant="secondary" onClick={onClose} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Annuler
             </Button>
             <Button type="submit" disabled={isSubmitting || noLandlords}>

@@ -89,24 +89,14 @@ const UnitList = () => {
           {units.length === 0 ? (
             <p className="unit-list__empty">Aucun bien enregistré pour le moment.</p>
           ) : (
-            units.map((unit) => {
-              const numericRent = Number.parseFloat(unit.rentAmount);
-              const formattedRent = Number.isNaN(numericRent)
-                ? unit.rentAmount
-                : numericRent.toFixed(2);
-
-              return (
-                <UnitCard
-                  key={unit.id}
-                  unit={{
-                    ...unit,
-                    rentAmount: formattedRent,
-                  }}
-                  onDelete={handleDelete}
-                  isDeleting={pendingDeletion === unit.id}
-                />
-              );
-            })
+            units.map((unit) => (
+              <UnitCard
+                key={unit.id}
+                unit={unit}
+                onDelete={handleDelete}
+                isDeleting={pendingDeletion === unit.id}
+              />
+            ))
           )}
         </div>
       )}

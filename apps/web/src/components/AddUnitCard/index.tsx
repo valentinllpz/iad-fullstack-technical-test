@@ -14,12 +14,6 @@ const AddUnitCard = ({ onClick }: AddUnitCardProps) => {
       role="button"
       tabIndex={0}
       aria-label="Ajouter un bien"
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onClick();
-        }
-      }}
     >
       <span className="add-unit-card__icon" aria-hidden="true">
         <span className="add-unit-card__icon-symbol">+</span>
