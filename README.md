@@ -2,6 +2,10 @@
 
 Technical interview that implements a fullstack Nx workspace featuring a NestJS API, a React frontend, and shared UI components. 
 
+<img width="1200" alt="image" src="https://github.com/user-attachments/assets/7d47075b-9f90-4850-bce8-8c83a6dee836" />
+
+
+
 ## Tech Stack
 
 - **Nx** for monorepo orchestration
