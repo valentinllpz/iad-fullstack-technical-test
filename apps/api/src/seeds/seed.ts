@@ -35,7 +35,8 @@ async function seed() {
       surface: 92,
       furnished: true,
       rentAmount: 2850,
-      photoUrl: 'https://example.com/haussmann-7e.jpg',
+      photoUrl:
+        'https://medias.maisonsetappartements.fr/pict/f400x267/4/0/0/8/ext_0_4008430.jpg?t=1757543882',
       landlordIds: [landlordCamille.id],
     });
 
@@ -52,7 +53,8 @@ async function seed() {
       surface: 76,
       furnished: false,
       rentAmount: 1980,
-      photoUrl: 'https://example.com/canal-saint-martin.jpg',
+      photoUrl:
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/676336793.jpg?k=23fd823abffebc76dc033123c609107dd699b9b9af865a23485488260bc97c6f&o=&hp=1',
       landlordIds: [landlordJulien.id],
     });
 
@@ -61,15 +63,18 @@ async function seed() {
       surface: 64,
       furnished: true,
       rentAmount: 1720,
-      photoUrl: 'https://example.com/loft-belleville.jpg',
+      photoUrl:
+        'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80',
       landlordIds: [landlordJulien.id, landlordSophie.id],
     });
 
     await unitsService.create({
-      name: 'Pied-a-terre Montmartre',
+      name: 'Pied-à-terre Montmartre',
       surface: 44,
       furnished: true,
       rentAmount: 1480,
+      photoUrl:
+        'https://media.vrbo.com/lodging/90000000/89190000/89184400/89184354/12a30d45.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill',
       landlordIds: [landlordSophie.id],
     });
 

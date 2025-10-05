@@ -2,6 +2,8 @@ import { Card, Button } from "@repo/ui";
 import { FiTrash2, FiImage } from "react-icons/fi";
 import { classnames } from "@repo/utils";
 
+import type { LandlordDto } from "../../lib/api";
+
 import "./styles.css";
 
 interface Unit {
@@ -11,19 +13,16 @@ interface Unit {
   furnished: boolean;
   rentAmount: string;
   photoUrl?: string;
-  landlords: Array<{
-    id: string;
-    firstName: string;
-    lastName: string;
-  }>;
+  landlords: LandlordDto[];
 }
 
 interface UnitCardProps {
   unit: Unit;
   onDelete?: (id: string) => void;
+  isDeleting?: boolean;
 }
 
-const UnitCard = ({ unit, onDelete }: UnitCardProps) => {
+const UnitCard = ({ unit, onDelete, isDeleting = false }: UnitCardProps) => {
   const hasPhoto = Boolean(unit.photoUrl);
 
   return (
@@ -69,10 +68,11 @@ const UnitCard = ({ unit, onDelete }: UnitCardProps) => {
             <Button
               variant="danger"
               onClick={() => onDelete(unit.id)}
+              disabled={isDeleting}
               className="unit-card__action-button unit-card__action-button--danger"
             >
               <FiTrash2 aria-hidden="true" className="unit-card__action-icon" />
-              Supprimer
+              {isDeleting ? "Suppression..." : "Supprimer"}
             </Button>
           )}
         </div>

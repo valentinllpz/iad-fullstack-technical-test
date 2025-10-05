@@ -29,8 +29,8 @@
 }
 
 .unit-card__placeholder-text {
-  font-size: 0.8rem;
-  font-style: italic;
+  font-size: 0.95rem;
+  color: #475569;
 }
 
 .unit-card__content {

@@ -1,96 +1,122 @@
-import { useState } from "react";
+import React from "react";
 
 import UnitCard from "../UnitCard";
 import AddUnitCard from "../AddUnitCard";
 import AddUnitModal from "../AddUnitModal";
 
+import {
+  createUnit,
+  deleteUnit,
+  fetchLandlords,
+  fetchUnits,
+  type CreateUnitPayload,
+  type LandlordDto,
+  type UnitDto,
+} from "../../lib/api";
+
 import "./styles.css";
 
-interface Unit {
-  id: string;
-  name: string;
-  surface: number;
-  furnished: boolean;
-  rentAmount: string;
-  photoUrl?: string;
-  landlords: Array<{
-    id: string;
-    firstName: string;
-    lastName: string;
-  }>;
-}
-
-const staticUnits: Unit[] = [
-  {
-    id: "1",
-    name: "Studio Le Marais",
-    surface: 28,
-    furnished: true,
-    rentAmount: "1150",
-    photoUrl:
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400",
-    landlords: [
-      { id: "1", firstName: "Camille", lastName: "Dupont" },
-      { id: "2", firstName: "Julien", lastName: "Martin" },
-    ],
-  },
-  {
-    id: "2",
-    name: "Duplex Canal Saint-Martin",
-    surface: 76,
-    furnished: false,
-    rentAmount: "1980",
-    photoUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400",
-    landlords: [{ id: "2", firstName: "Julien", lastName: "Martin" }],
-  },
-  {
-    id: "3",
-    name: "Loft Belleville",
-    surface: 64,
-    furnished: true,
-    rentAmount: "1720",
-    landlords: [
-      { id: "2", firstName: "Julien", lastName: "Martin" },
-      { id: "3", firstName: "Sophie", lastName: "Bernard" },
-    ],
-  },
-  {
-    id: "4",
-    name: "Duplex Canal Saint-Martin",
-    surface: 76,
-    furnished: false,
-    rentAmount: "1980",
-    photoUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400",
-    landlords: [{ id: "2", firstName: "Julien", lastName: "Martin" }],
-  },
-  {
-    id: "5",
-    name: "Duplex Canal Saint-Martin",
-    surface: 76,
-    furnished: false,
-    rentAmount: "1980",
-    photoUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400",
-    landlords: [{ id: "2", firstName: "Julien", lastName: "Martin" }],
-  },
-];
-
 const UnitList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [units, setUnits] = React.useState<UnitDto[]>([]);
+  const [landlords, setLandlords] = React.useState<LandlordDto[]>([]);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [pendingDeletion, setPendingDeletion] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const [unitsResponse, landlordsResponse] = await Promise.all([
+          fetchUnits(),
+          fetchLandlords(),
+        ]);
+        setUnits(unitsResponse);
+        setLandlords(landlordsResponse);
+      } catch (fetchError) {
+        const message =
+          fetchError instanceof Error
+            ? fetchError.message
+            : "Impossible de récupérer les données.";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const handleCreateUnit = async (payload: CreateUnitPayload) => {
+    const newUnit = await createUnit(payload);
+    setUnits((prev) => [newUnit, ...prev]);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      setPendingDeletion(id);
+      await deleteUnit(id);
+      setUnits((prev) => prev.filter((unit) => unit.id !== id));
+    } catch (deleteError) {
+      const message =
+        deleteError instanceof Error
+          ? deleteError.message
+          : "Impossible de supprimer le bien.";
+      alert(message);
+    } finally {
+      setPendingDeletion(null);
+    }
+  };
+
+  const handleOpenModal = () => {
+    if (landlords.length === 0) {
+      alert("Ajoutez d'abord un propriétaire avant de créer un bien.");
+      return;
+    }
+    setIsModalOpen(true);
+  };
 
   return (
     <div>
-      <div className="unit-list">
-        <AddUnitCard onClick={() => setIsModalOpen(true)} />
-        {staticUnits.map((unit) => (
-          <UnitCard
-            key={unit.id}
-            unit={unit}
-            onDelete={(id) => console.log("Supprimer le bien", id)}
-          />
-        ))}
-      </div>
+      {error ? <p className="unit-list__error">{error}</p> : null}
+      {loading ? (
+        <p className="unit-list__loading">Chargement des biens...</p>
+      ) : (
+        <div className="unit-list">
+          <AddUnitCard onClick={handleOpenModal} />
+          {units.length === 0 ? (
+            <p className="unit-list__empty">Aucun bien enregistré pour le moment.</p>
+          ) : (
+            units.map((unit) => {
+              const numericRent = Number.parseFloat(unit.rentAmount);
+              const formattedRent = Number.isNaN(numericRent)
+                ? unit.rentAmount
+                : numericRent.toFixed(2);
 
-      <AddUnitModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+              return (
+                <UnitCard
+                  key={unit.id}
+                  unit={{
+                    ...unit,
+                    rentAmount: formattedRent,
+                  }}
+                  onDelete={handleDelete}
+                  isDeleting={pendingDeletion === unit.id}
+                />
+              );
+            })
+          )}
+        </div>
+      )}
+
+      <AddUnitModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        landlords={landlords}
+        onSubmit={handleCreateUnit}
+      />
     </div>
   );
 };

@@ -19,7 +19,12 @@ export class UnitsService {
   ) {}
 
   async findAll(): Promise<Unit[]> {
-    return this.unitsRepository.find({ relations: ['landlords'] });
+    return this.unitsRepository.find({
+      relations: ['landlords'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async create(createUnitDto: CreateUnitDto): Promise<Unit> {

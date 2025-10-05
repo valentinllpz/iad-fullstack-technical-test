@@ -6,12 +6,19 @@ import { LandlordsModule } from './modules/landlords/landlords.module';
 import { Unit } from './modules/units/unit.entity';
 import { UnitsModule } from './modules/units/units.module';
 
+const envFilePath = process.env.NODE_ENV
+  ? [`.env.${process.env.NODE_ENV}`, '.env.local', '.env']
+  : ['.env.local', '.env'];
+
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath,
+    }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: process.env.DB_PATH ?? 'data/db.sqlite',
+      database: process.env.DB_PATH,
       entities: [Unit, Landlord],
       synchronize: true, // TODO: disable in production
     }),

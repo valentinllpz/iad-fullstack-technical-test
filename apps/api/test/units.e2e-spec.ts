@@ -3,23 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
-import { promises as fs } from 'fs';
-import { join } from 'path';
-import { tmpdir } from 'os';
 import { AppModule } from '../src/app.module';
+import { Unit } from '../src/modules/units/unit.entity';
 
 describe('Units API (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
-  let dbPath: string;
 
   beforeAll(async () => {
-    dbPath = join(
-      tmpdir(),
-      `use-case-units-${Date.now()}-${Math.random()}.sqlite`,
-    );
-    process.env.DB_PATH = dbPath;
-
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -35,7 +26,6 @@ describe('Units API (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    await fs.rm(dbPath, { force: true });
   });
 
   it('creates and lists a unit linked to at least one landlord', async () => {
@@ -79,5 +69,52 @@ describe('Units API (e2e)', () => {
         rentAmount: 800,
       })
       .expect(400);
+  });
+
+  it('lists units with the newest first', async () => {
+    const landlordResponse = await request(app.getHttpServer())
+      .post('/landlords')
+      .send({ firstName: 'Camille', lastName: 'Dupont' })
+      .expect(201);
+
+    const landlordId = landlordResponse.body.id;
+
+    const firstUnitResponse = await request(app.getHttpServer())
+      .post('/units')
+      .send({
+        name: 'Ancien appartement',
+        surface: 40,
+        furnished: true,
+        rentAmount: 1200,
+        landlordIds: [landlordId],
+      })
+      .expect(201);
+
+    const secondUnitResponse = await request(app.getHttpServer())
+      .post('/units')
+      .send({
+        name: 'Nouveau duplex',
+        surface: 85,
+        furnished: false,
+        rentAmount: 2500,
+        landlordIds: [landlordId],
+      })
+      .expect(201);
+
+    const unitRepository = dataSource.getRepository(Unit);
+    await unitRepository.update(firstUnitResponse.body.id, {
+      createdAt: new Date('2025-10-01T10:00:00.000Z'),
+    });
+    await unitRepository.update(secondUnitResponse.body.id, {
+      createdAt: new Date('2025-10-01T11:00:00.000Z'),
+    });
+
+    const listResponse = await request(app.getHttpServer())
+      .get('/units')
+      .expect(200);
+
+    expect(listResponse.body).toHaveLength(2);
+    expect(listResponse.body[0].id).toBe(secondUnitResponse.body.id);
+    expect(listResponse.body[1].id).toBe(firstUnitResponse.body.id);
   });
 });
