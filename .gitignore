@@ -157,4 +157,4 @@ Temporary Items
 ## Snapshot directory
 **/__snapshots__/**
 # SQLite databases
-# *.sqlite
+*.sqlite
